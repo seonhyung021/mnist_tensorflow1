@@ -2,7 +2,7 @@ import tensorflow as tf
 import keras
 import pandas
 
-tf.compat.v1.disable_eager_execution()  # ✅ 2.x에서도 placeholder, Session 사용 가능하게 만듦
+tf.compat.v1.disable_eager_execution()  # 2.x에서도 placeholder, Session 사용 가능하게 만듦
 
 # Model Parameters
 learning_rate = 0.001
@@ -27,12 +27,11 @@ n_hidden2 = 256
 n_classes = 10  # MNIST total classes (0-9 digits)
 
 # Placeholders for input and output
-X = tf.compat.v1.placeholder(tf.float32, [None, n_input])   # ✅ v1 방식 유지
-Y = tf.compat.v1.placeholder(tf.float32, [None, n_classes]) # ✅ v1 방식 유지
-
+X = tf.compat.v1.placeholder(tf.float32, [None, n_input])  
+Y = tf.compat.v1.placeholder(tf.float32, [None, n_classes]) 
 # Weights and biases initialization
 weights = {
-    'h1': tf.Variable(tf.random.normal([n_input, n_hidden1])),  # 여기 tf.random_normal → tf.random.normal (v2에선 바뀜)
+    'h1': tf.Variable(tf.random.normal([n_input, n_hidden1])),  # tf.random_normal → tf.random.normal 
     'h2': tf.Variable(tf.random.normal([n_hidden1, n_hidden2])),
     'out': tf.Variable(tf.random.normal([n_hidden2, n_classes]))
 }
@@ -55,8 +54,8 @@ logits = multilayer_perceptron(X)
 
 # Define loss and optimizer
 loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(
-    logits=logits, labels=Y))  # ✅ v2에서는 _v2 안 붙임
-optimizer = tf.compat.v1.train.AdamOptimizer(learning_rate=learning_rate)  # ✅
+    logits=logits, labels=Y))  #v2에서는 _v2 안 붙임
+optimizer = tf.compat.v1.train.AdamOptimizer(learning_rate=learning_rate)  
 train_op = optimizer.minimize(loss_op)
 
 # Evaluate model
@@ -73,7 +72,7 @@ iterator = tf.compat.v1.data.make_initializable_iterator(dataset)
 next_batch = iterator.get_next()
 
 # Start Training
-with tf.compat.v1.Session() as sess:  # ✅
+with tf.compat.v1.Session() as sess:  
     sess.run(init)
     sess.run(iterator.initializer)
 
@@ -90,7 +89,7 @@ with tf.compat.v1.Session() as sess:  # ✅
 
     print("Final Test Accuracy:", sess.run(accuracy, feed_dict={X: x_test, Y: y_test}),"%")
     print()
-    print("Tensorflow:", tf.__version__)  # ✅ 그대로 출력됨
+    print("Tensorflow:", tf.__version__)  
 
     data = {
         '이름': ['김선형'],
